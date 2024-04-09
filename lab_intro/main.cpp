@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <iostream>
 
-#include "rgbapixel.h"
+// #include "rgbapixel.h"
 #include "png.h"
 
 using namespace std;
