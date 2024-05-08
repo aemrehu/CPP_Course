@@ -17,6 +17,9 @@
  * Destroys the current List. This function should ensure that
  * memory does not leak on destruction of a list.
  */
+#include "list.h"
+#include <iostream>
+
 template <class T>
 List<T>::~List()
 {
@@ -31,6 +34,13 @@ template <class T>
 void List<T>::clear()
 {
     // @todo Graded in lab_gdb
+    ListNode * temp;
+    while (head != NULL)
+    {
+        temp = head;
+        head = head->next;
+        delete temp;
+    }
 }
 
 /**
@@ -43,6 +53,10 @@ template <class T>
 void List<T>::insertFront(T const & ndata)
 {
     // @todo Graded in lab_gdb
+    ListNode * temp = new ListNode(ndata);
+    temp->next = head;
+    head = temp;
+    length++;
 }
 
 /**
@@ -60,12 +74,13 @@ void List<T>::insertBack( const T & ndata )
     if (temp == NULL)
     {
         head = new ListNode(ndata);
+        length++;
     }
     else
     {
         while (temp->next != NULL)
             temp = temp->next;
-        temp = new ListNode(ndata);
+        temp->next = new ListNode(ndata);
         length++;
     }
 }
@@ -94,7 +109,7 @@ typename List<T>::ListNode* List<T>::reverse( ListNode * curr, ListNode * prev, 
 {
     // @todo Graded in lab_gdb
     ListNode * temp;
-    if (len <= 0)
+    if (len <= 1)
     {
         curr->next = prev;
         return curr;
@@ -133,6 +148,7 @@ void List<T>::shuffle()
     }
     prev->next = NULL;
 
+
     // interleave
     while (two != NULL)
     {
@@ -140,6 +156,7 @@ void List<T>::shuffle()
         one->next = two;
         two = two->next;
         one->next->next = temp;
+        one = temp;
     }
 }
 
