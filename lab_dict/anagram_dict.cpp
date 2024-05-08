@@ -23,6 +23,20 @@ using std::ifstream;
 AnagramDict::AnagramDict(const string& filename)
 {
     /* Your code goes here! */
+    std::map<string, unsigned int> count;
+    ifstream wordsFile(filename);
+    string word;
+    if (wordsFile.is_open()) {
+        while (getline(wordsFile, word)) {
+            if (count[word] == 0){
+                string sortedWord = word;
+                std::sort(sortedWord.begin(), sortedWord.end());
+                dict[sortedWord].push_back(word);
+                count[word]++;
+            }
+        }
+    }
+    wordsFile.close();
 }
 
 /** 
@@ -32,6 +46,15 @@ AnagramDict::AnagramDict(const string& filename)
 AnagramDict::AnagramDict(const vector< string >& words)
 {
     /* Your code goes here! */
+    std::map<string, unsigned int> count;
+    for (string word : words) {
+        if (count[word] == 0){
+            string sortedWord = word;
+            std::sort(sortedWord.begin(), sortedWord.end());
+            dict[sortedWord].push_back(word);
+            count[word]++;
+        }
+    }
 }
 
 /**
@@ -43,8 +66,13 @@ AnagramDict::AnagramDict(const vector< string >& words)
 vector< string > AnagramDict::get_anagrams(const string& word) const
 {
     /* Your code goes here! */
+    string sortedWord = word;
+    std::sort(sortedWord.begin(), sortedWord.end());
+    if (dict.find(sortedWord) != dict.end()) {
+        return dict.at(sortedWord);
+    }
     return vector< string >();
-}       
+}
 
 /**
  * @return A vector of vectors of strings. Each inner vector contains
@@ -55,7 +83,14 @@ vector< string > AnagramDict::get_anagrams(const string& word) const
 vector< vector< string > > AnagramDict::get_all_anagrams() const
 {
     /* Your code goes here! */
-    return vector< vector < string > >();
+    vector< vector< string > > out;
+    for (std::pair<string, vector<string>> anagrams : dict) {
+        if (anagrams.second.size() > 1) {
+            out.push_back(anagrams.second);
+        }
+    }
+    return out;
+    // return vector< vector < string > >();
 }
 
 
