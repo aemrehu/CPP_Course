@@ -52,8 +52,22 @@ bool AnagramFinder<Dict>::checkWord( const string & word, const string & test ) 
      * templated hashtable class Dict.
      */
 
-    (void) word; // prevent warnings... When you implement this function, remove this line.
-    (void) test; // prevent warnings... When you implement this function, remove this line.
+    // count the number of times each character appears in the word
+    Dict<char, int> wordCount(256);
+    for( size_t i = 0; i < word.length(); i++ )
+        wordCount[ word[i] ]++;
+    
+    // count the number of times each character appears in the test word
+    Dict<char, int> testCount(256);
+    for( size_t i = 0; i < test.length(); i++ )
+        testCount[ test[i] ]++;
+    
+    // compare the two hash tables to see if they are equal
+    typename Dict<char, int>::iterator it;
+    for( it = wordCount.begin(); it != wordCount.end(); it++ ) {
+        if( testCount[ it->first ] != it->second )
+            return false;
+    }
 
     return true;
 }
